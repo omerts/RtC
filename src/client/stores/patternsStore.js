@@ -23,7 +23,7 @@ export const currentColor =
     .startWith(null)
 
 export const currentPattern =
-  dispatcher(actions.COLOR_TAPPED, actions.GAME_RESTARTED, actions.PATTERN_ACTIVATED)
+  dispatcher(actions.COLOR_TAPPED, actions.GAME_STARTED, actions.PATTERN_ACTIVATED)
   .scan((colors, data) => {
     // new pattern / restart
     if (!data || !data.color) {

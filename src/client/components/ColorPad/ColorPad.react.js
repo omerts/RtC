@@ -9,6 +9,7 @@ const ColorPad = ({isActive, isDisabled, onColorTapped, tappedColors}) => {
                    className='color'                 
                    style={{backgroundColor: Colors[color]}}
                    disabled={isDisabled}
+                   onClick={!isDisabled && onColorTapped.bind(null, color)}
                    onTouchTap={!isDisabled && onColorTapped.bind(null, color)} />
   })
 

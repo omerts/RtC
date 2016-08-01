@@ -27,7 +27,7 @@ export default class Register extends React.Component {
                <div className='input-tip'> *(at least 3 chars) </div>
               <input type='text' placeholder='Nickname' ref='nickname' name='nickname' />
               <div className='input-tip'>*(at least 3 chars)</div>
-            <button className='button' onTouchTap={this._onUserJoin}>Join</button>
+            <button className='button' onClick={this._onUserJoin} onTouchTap={this._onUserJoin}>Join</button>
             {!this.state.isValid && <p style={{color: 'red'}}>*Please make sure fields are valid</p>}
            </div>
   }
