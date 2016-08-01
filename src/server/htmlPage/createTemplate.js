@@ -41,6 +41,7 @@ function createTemplate(assets = {}) {
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta httpEquiv='Content-Language' content='en' />
+        <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
 
         <title>${title}</title>
