@@ -6,8 +6,12 @@ body, html {
   background: -webkit-radial-gradient(center, ellipse cover, #595760 4%,#37363c 99%); 
   background: radial-gradient(ellipse at center, #595760 4%,#37363c 99%);
 
-  input {
+  input  {
     color: black;
+  }
+
+  tr {
+    background: transparent !important; // to do fix later
   }
 
   #app {
