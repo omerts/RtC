@@ -1,0 +1,22 @@
+body, html {
+  height: 100%;
+  color: white;
+  background: #595760; 
+  background: -moz-radial-gradient(center, ellipse cover, #595760 4%, #37363c 99%);
+  background: -webkit-radial-gradient(center, ellipse cover, #595760 4%,#37363c 99%); 
+  background: radial-gradient(ellipse at center, #595760 4%,#37363c 99%);
+
+  input {
+    color: black;
+  }
+
+  #app {
+    height: 100%;
+
+    .app-container {
+     height: 100%;     
+     width: 50%;
+     margin: 0 auto;
+    }
+  }
+}
