@@ -48,12 +48,6 @@ export const userStatus = actionDispatcher(actions.USER_REGISTERED,
                           }, null)
                           .startWith(UserStatus.NA) 
 
-export const isUserStillInTheGame = 
-  dispatcher(actions.USER_FAILED, actions.USER_TIMEDOUT)
-   .mapTo(false)
-   .merge(dispatcher(actions.GAME_STARTED).mapTo(true))                               
-   .startWith(true)
-
-export default Observable.combineLatestObj({userJoined, userStatus, isUserStillInTheGame})
+export default Observable.combineLatestObj({userJoined, userStatus})
 
 

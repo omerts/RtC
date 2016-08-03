@@ -7,9 +7,8 @@ const ColorPad = ({isActive, isDisabled, onColorTapped, tappedColors}) => {
   const colors = Object.keys(Colors).map(color => {
     return <button key={color}
                    className='color'                 
-                   style={{backgroundColor: Colors[color]}}
-                   disabled={isDisabled}
-                   onTouchTap={!isDisabled && onColorTapped.bind(null, color)} />
+                   style={{backgroundColor: Colors[color]}}                   
+                   onTouchTap={onColorTapped.bind(null, color)} />
   })
 
   const usedColors = tappedColors.map((color, i) => {

@@ -20,9 +20,8 @@ function _getClientView(props) {
   return <span >
             <ColorShower color={props.currentColor} />
             <StatusBar userStatus={props.userStatus} />
-            <ColorPad isActive={props.isUserStillInTheGame && 
-                                props.userStatus !== UserStatus.SUCCESS} 
-                      isDisabled={props.userStatus === UserStatus.IDEAL && props.currentColor}
+            <ColorPad isActive={props.userStatus === UserStatus.IDEAL  && 
+                                !props.currentColor} 
                       tappedColors={props.currentPattern}
                       onColorTapped={props.onColorTapped} />                
           </span>
