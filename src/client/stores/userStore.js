@@ -3,9 +3,30 @@ import dispatcher, {actionDispatcher} from 'shared/dispatcher'
 import {actions, send} from 'shared/actions'
 import {UserStatus, GameIsInProgressError} from 'shared/consts'
 
-export const userJoined = Observable.of((userData) => {
-                            send(actions.USER_JOINED, userData)
-                          })
+export const userJoined = 
+  Observable.of((userData) => {
+    send(actions.USER_JOINED, userData)
+  })
+
+const NA = 
+  dispatcher(actions.GAME_STARTED)
+  .mapTo(UserStatus.NA)
+
+const ideal =
+  dispatcher(actions.USER_REGISTERED)
+  .mapTo(UserStatus.IDEAL)  
+
+const cantJoin = 
+  dispatcher(actions.USER_REGISTRATION_FAILED)
+  .mapTo(UserStatus.CANTJOIN)
+
+const success = 
+  dispatcher(actions.USER_SUCCEEDED)
+  .mapTo(UserStatus.SUCCESS)
+
+const failed = 
+  dispatcher(actions.USER_FAILED)
+  .mapTo(UserStatus.FAILED)
 
 export const userStatus = actionDispatcher(actions.USER_REGISTERED,
                                            actions.USER_REGISTRATION_FAILED,
