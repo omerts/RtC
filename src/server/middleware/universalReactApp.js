@@ -3,8 +3,8 @@ import RouterContext from 'react-router/lib/RouterContext';
 import createMemoryHistory from 'react-router/lib/createMemoryHistory';
 import match from 'react-router/lib/match';
 import render from '../htmlPage/render';
-import stores from 'client/stores'
-import App from 'client/components/App.react'
+import stores from 'shared/stores'
+import App from 'shared/components/App'
 
 /**
  * An express middleware that is capabable of doing React server side rendering.

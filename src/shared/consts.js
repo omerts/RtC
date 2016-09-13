@@ -9,7 +9,7 @@ export const Colors = {
   CYAN: '#00FFFF',
   BLUE: '#0000FF',
   VIOLET: '#7F00FF',
-  MAGENTA: '#FF00FF'  
+  MAGENTA: '#FF00FF'
 }
 
 export const GameSpeedMS = 1000
@@ -17,6 +17,8 @@ export const GameSpeedMS = 1000
 export const DefaultLevel = 3
 
 export const GameIsInProgressErrorCode = -999
+
+export const FlowLastActionsCount = 20
 
 export const UserStatus = keyMirror({
   CANTJOIN: null,
@@ -27,7 +29,7 @@ export const UserStatus = keyMirror({
   NA: null
 })
 
-Observable.combineLatestObj = function (obsObj) {  
+Observable.combineLatestObj = function (obsObj) {
   let observables = []
   const keys = Object.keys(obsObj)
 
@@ -35,7 +37,7 @@ Observable.combineLatestObj = function (obsObj) {
     observables.push(obsObj[key])
   })
 
-  return Observable.combineLatest(observables, (...args) => {    
+  return Observable.combineLatest(observables, (...args) => {
     return args.reduce((output, current, i) => {
       return Object.assign(output, {[keys[i]]: current})
     }, {})

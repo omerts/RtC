@@ -5,20 +5,22 @@ import userStore from './userStore'
 import statsStore from './statsStore'
 import routeStore from './routeStore'
 
-export default Observable.combineLatest(adminStore, 
+export default Observable.combineLatest(adminStore,
                                         userStore,
-                                        patternsStore,                                         
+                                        patternsStore,
                                         statsStore,
-                                        routeStore, 
-                                        (adminState, 
-                                         userState, 
-                                         patternsState, 
+                                        routeStore,
+                                        (adminState,
+                                         userState,
+                                         patternsState,
                                          statsState,
                                          routeState) => {
-                                          return Object.assign({}, 
+                                          return Object.assign({},
                                                                adminState,
                                                                userState,
                                                                patternsState,
                                                                statsState,
                                                                routeState)
                                         })
+                                        .publishReplay(1)
+                                        .refCount()

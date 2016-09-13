@@ -2,7 +2,7 @@ import React from 'react'
 import {UserStatus} from 'shared/consts'
 import {Glyphicon} from 'react-bootstrap'
 
-function _getStatusElement(userStatus) {
+function getStatusElement(userStatus) {
   switch (userStatus) {
     case (UserStatus.SUCCESS): {
       return <div style={{color: 'green'}}>
@@ -26,7 +26,7 @@ function _getStatusElement(userStatus) {
 }
 
 const StatusBar = ({userStatus}) => {
-  return _getStatusElement(userStatus)
+  return getStatusElement(userStatus)
 }
 
 export default StatusBar

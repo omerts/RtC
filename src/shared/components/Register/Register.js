@@ -9,6 +9,7 @@ export default class Register extends React.Component {
       isValid: true
     }
   }
+
   _onUserJoin = () => {
     const name = this.refs.name.value
     const nickname = this.refs.nickname.value

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './components/App.react'
-import stores from './stores'
+import App from 'shared/components/App'
+import stores from 'shared/stores'
 import services from './services'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
