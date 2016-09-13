@@ -1,6 +1,6 @@
 import keyMirror from 'key-mirror'
 
-const actions = keyMirror({
+const Actions = keyMirror({
   GAME_RESTARTED: null, // {}  
   GAME_STARTED: null, // {}  
   PATTERN_ADDED: null, // {colors:[], speed: number}
@@ -17,4 +17,4 @@ const actions = keyMirror({
   ROUTE_CHANGED: null, //{path: string, query: string}
 })
 
-export default actions
+export default Actions

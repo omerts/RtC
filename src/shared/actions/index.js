@@ -1,2 +1,2 @@
-export {default as actions} from './actions'
-export {default as send} from './send'
+export {default as Actions} from './Actions'
+export {default as dispatch} from './dispatch'

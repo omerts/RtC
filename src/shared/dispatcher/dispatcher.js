@@ -1,58 +1,65 @@
-import {Subject} from '@reactivex/rxjs'
-import {actions} from '../actions'
-const _dispatcher = new Subject();
+import { Subject } from '@reactivex/rxjs'
+import { Actions } from 'shared/actions'
+
+const _dispatcher = new Subject()
 
 // Hide the subject, so the outer world doesn't abuse it
-export const dispatcher = _dispatcher
-                          .asObservable()
-                          // Filter non existent actions
-                          .filter(action => action.type in actions)
-                          .do(::console.log)                          
-                          .publishReplay(1)
-                          .refCount()
+const dispatcher =
+  _dispatcher
+    .asObservable()
+    .publishReplay(1)
+    .refCount()
 
 export const DONT_USE_UNLESS_YOUR_NAME_IS_ACTION_CREATOR = _dispatcher
 
-function buildFilterFunction(args) {
+function buildFilterFunction (args) {
   // Check if has actions
-  const hasActions = Object.keys(args).some(key => Object.keys(actions).indexOf(args[key]) !== -1)
+  const hasActions =
+    Object.keys(args)
+      .some(key => Object.keys(Actions).indexOf(args[key]) !== -1)
 
-  if (!hasActions) {    
+  if (!hasActions) {
     throw new Error('Invalid filters provided to dispatcher func')
   }
-  
+
   return (message) => {
     // If filter args have actions to filter by them
-    return Object.keys(args)
-           .some(key => args[key] === message.type)
+    return (
+      Object.keys(args)
+        .some(key => args[key] === message.type)
+    )
   }
 }
 
 // Dispatch full actions (including data)
 // We either get a predicate, or a list of actions
-export function actionDispatcher(...args) {  
+export function getAction (...args) {
   let filteredDispatcher
 
   if (args.length === 0) {
     filteredDispatcher = dispatcher
-  } else  if (typeof args[0] === 'function') {
-    filteredDispatcher = dispatcher
-                          .filter(args[0])          
+  } else if (typeof args[0] === 'function') {
+    filteredDispatcher =
+      dispatcher
+        .filter(args[0])
   } else {
     // Sugaring for filtering by actions
-    // arguments's values are the actions we would like to filter by    
-    filteredDispatcher = dispatcher
-                         .filter(buildFilterFunction(args))
+    // arguments's values are the actions we would like to filter by
+    filteredDispatcher =
+      dispatcher
+        .filter(buildFilterFunction(args))
   }
 
   // After we have filtered, the only data that is interesting is under the data key
-  return filteredDispatcher                    
+  return filteredDispatcher
 }
 
 // Dispatch only the data from the actions
-export default function (...args) {
+export default function getPayload (...args) {
   // We usually only need the data prop, so pluck it by
   // default
-  return actionDispatcher(...args)
-          .pluck('data')
+  return (
+    getAction(...args)
+      .pluck('payload')
+  )
 }

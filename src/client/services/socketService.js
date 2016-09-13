@@ -1,22 +1,25 @@
 import socketIO from 'socket.io-client'
-import {actions, send} from 'shared/actions'
-import {actionDispatcher} from 'shared/dispatcher'
+import {Actions, dispatch} from 'shared/actions'
+import {getAction} from 'shared/dispatcher'
 
 const io = socketIO(process.env.SOCKET_ADDRESS)
 
+const emit =
+  (action) => {
+    io.emit('client action', {action})
+  }
+
 io.on('server action', ({action}) => {
-  send(action.type, action.data)
+  dispatch(action.type, action.payload)
 })
 
-const serverDispatcher = actionDispatcher(actions.USER_JOINED, 
-                                          actions.USER_FAILED, 
-                                          actions.USER_SUCCEEDED, 
-                                          actions.PATTERN_ADDED,
-                                          actions.PATTERN_TIMEDOUT,
-                                          actions.GAME_RESTARTED)
-                          .do((action) => {                            
-                            io.emit('client action', {action})
-                          })
+const serverDispatcher = getAction(Actions.USER_JOINED,
+                                   Actions.USER_FAILED,
+                                   Actions.USER_SUCCEEDED,
+                                   Actions.PATTERN_ADDED,
+                                   Actions.PATTERN_TIMEDOUT,
+                                   Actions.GAME_RESTARTED)
+                          .do(emit)
                           .startWith(null)
 
 export default serverDispatcher

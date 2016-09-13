@@ -1,9 +1,32 @@
 import {Observable} from '@reactivex/rxjs'
-import {actionDispatcher} from 'shared/dispatcher'
-import {actions, send} from 'shared/actions'
+import {getAction} from 'shared/dispatcher'
+import {Actions, dispatch} from 'shared/actions'
 import 'shared/consts' // for Observable.combineLatestObj
 
 let ioServer = undefined
+
+const dispatchToSpecificClient =
+  (action) => {
+    const {socket, ...other} = action.payload
+
+    // Make sure the socket isn't passed on
+    action.payload = other
+
+    // Emit to specific client
+    socket.emit('server action', {action})
+  }
+
+const dispatchToAllClients =
+  (action) => {
+    // Make sure the socket isn't passed on
+    if (action.payload) {
+      const {socket, ...other} = action.payload
+      action.payload = other
+    }
+
+    // Emit to all clients
+    ioServer.sockets.emit('server action', {action})
+  }
 
 export const initServer = (server) => {
   ioServer = server
@@ -11,43 +34,28 @@ export const initServer = (server) => {
 
 export const initClient = (socket) => {
   socket.on('client action', ({action}) => {
-    const {type, data} = action
+    const {type, payload} = action
 
-    if (type === actions.USER_JOINED) {
-      data.socket = socket
+    if (type === Actions.USER_JOINED) {
+      payload.socket = socket
     }
 
-    send(type, data)
+    dispatch(type, payload)
   })
 }
 
-export const specificClientDispatcher = actionDispatcher(actions.USER_REGISTERED,
-                                                         actions.USER_REGISTRATION_FAILED, 
-                                                         actions.USER_TIMEDOUT)
-                                        .do((action) => {
-                                          const {socket, ...other} = action.data
+export const specificClientDispatcher =
+  getAction(Actions.USER_REGISTERED,
+            Actions.USER_REGISTRATION_FAILED,
+            Actions.USER_TIMEDOUT)
+            .do(dispatchToSpecificClient)
+            .startWith(null)
 
-                                          // Make sure the socket isn't passed on
-                                          action.data = other
-
-                                          // Emit to specific client
-                                          socket.emit('server action', {action})
-                                        })
-                                        .startWith(null)
-
-export const clientDispatcher = actionDispatcher(actions.PATTERN_ACTIVATED, 
-                                                 actions.STATS_UPDATED,
-                                                 actions.GAME_STARTED)
-                                  .do((action) => {
-                                    // Make sure the socket isn't passed on
-                                    if (action.data) {
-                                      const {socket, ...other} = action.data
-                                      action.data = other
-                                    }
-
-                                    // Emit to all clients
-                                    ioServer.sockets.emit('server action', {action})
-                                  })
-                                  .startWith(null)
+export const clientDispatcher =
+  getAction(Actions.PATTERN_ACTIVATED,
+            Actions.STATS_UPDATED,
+            Actions.GAME_STARTED)
+  .do(dispatchToAllClients)
+  .startWith(null)
 
 export default Observable.combineLatestObj({specificClientDispatcher, clientDispatcher})

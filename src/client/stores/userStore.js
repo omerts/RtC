@@ -1,73 +1,66 @@
 import {Observable} from '@reactivex/rxjs'
-import dispatcher, {actionDispatcher} from 'shared/dispatcher'
-import {actions, send} from 'shared/actions'
+import getPayload from 'shared/dispatcher'
+import {Actions, dispatch} from 'shared/actions'
 import {UserStatus, GameIsInProgressError} from 'shared/consts'
 
-export const userJoined = 
-  Observable.of((userData) => {
-    send(actions.USER_JOINED, userData)
-  })
+const getStatusForPattern = (prevStatus) => {
+  // If was successfull remove last status
+  // if failed/timedout let him keep on seeing it
+  // so he doesn't get an empty screen
+  if (prevStatus === UserStatus.SUCCESS) {
+    return UserStatus.IDEAL
+  } else {
+    return prevStatus
+  }
+}
 
-const NA = 
-  dispatcher(actions.GAME_STARTED)
+const na = 
+  getPayload(Actions.GAME_STARTED)
   .mapTo(UserStatus.NA)
 
 const ideal =
-  dispatcher(actions.USER_REGISTERED)
+  getPayload(Actions.USER_REGISTERED)
   .mapTo(UserStatus.IDEAL)  
 
 const cantJoin = 
-  dispatcher(actions.USER_REGISTRATION_FAILED)
+  getPayload(Actions.USER_REGISTRATION_FAILED)
   .mapTo(UserStatus.CANTJOIN)
 
 const success = 
-  dispatcher(actions.USER_SUCCEEDED)
+  getPayload(Actions.USER_SUCCEEDED)
   .mapTo(UserStatus.SUCCESS)
 
 const failed = 
-  dispatcher(actions.USER_FAILED)
+  getPayload(Actions.USER_FAILED)
   .mapTo(UserStatus.FAILED)
 
-export const userStatus = actionDispatcher(actions.USER_REGISTERED,
-                                           actions.USER_REGISTRATION_FAILED,
-                                           actions.PATTERN_ACTIVATED,
-                                           actions.GAME_STARTED,
-                                           actions.USER_SUCCEEDED, 
-                                           actions.USER_FAILED,
-                                           actions.USER_TIMEDOUT)
-                          .scan((prevStatus, action) => {
-                            switch (action.type) {
-                              case actions.GAME_STARTED: {
-                                return UserStatus.NA
-                              }                              
-                              case actions.USER_REGISTERED: {
-                                return UserStatus.IDEAL
-                              }
-                              case actions.USER_REGISTRATION_FAILED: {
-                                return UserStatus.CANTJOIN
-                              }
-                              case actions.USER_SUCCEEDED: {
-                                return UserStatus.SUCCESS
-                              }
-                              case actions.USER_FAILED: {
-                                return UserStatus.FAILED
-                              }         
-                              case actions.USER_TIMEDOUT: {
-                                return UserStatus.TIMEDOUT
-                              }
-                              case actions.PATTERN_ACTIVATED: {
-                                // If was successfull remove last status
-                                // if failed/timedout let him keep on seeing it
-                                // so he doesn't get an empty screen
-                                if (prevStatus === UserStatus.SUCCESS) {
-                                  return UserStatus.IDEAL
-                                } else {
-                                  return prevStatus
-                                }
-                              }
-                            }
-                          }, null)
-                          .startWith(UserStatus.NA) 
+const timedout = 
+  getPayload(Actions.USER_TIMEDOUT)
+  .mapTo(UserStatus.TIMEDOUT)
+
+const status = 
+  Observable.merge(na, 
+                  ideal, 
+                  cantJoin, 
+                  success, 
+                  failed, 
+                  timedout)
+  .startWith(UserStatus.NA) 
+
+const patternActivated =
+  getPayload(Actions.PATTERN_ACTIVATED)
+  .withLatestFrom(status, (pattern, prevStatus) => {
+    return prevStatus
+  })
+  .map(getStatusForPattern)
+
+export const userStatus = 
+  Observable.merge(status, patternActivated)
+
+export const userJoined = 
+  Observable.of((userData) => {
+    dispatch(Actions.USER_JOINED, userData)
+  })
 
 export default Observable.combineLatestObj({userJoined, userStatus})
 

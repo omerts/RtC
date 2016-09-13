@@ -13,7 +13,7 @@ const container = document.querySelector('#app');
 // The following is needed so that we can hot reload our App.
 if (process.env.NODE_ENV === 'development' && module.hot) {
   // Accept changes to this file for hot reloading.
-  module.hot.accept('./index.js');  
+  module.hot.accept('./index.js');
 }
 
 services.subscribe(() =>{}, ::console.log, ::console.log)

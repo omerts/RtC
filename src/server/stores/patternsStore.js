@@ -1,59 +1,63 @@
 import {Observable} from '@reactivex/rxjs'
-import dispatcher from 'shared/dispatcher'
-import {actions} from 'shared/actions'
+import getPayload from 'shared/dispatcher'
+import {Actions} from 'shared/actions'
 import {Colors, GameSpeedMS, DefaultLevel} from 'shared/consts'
 
 const colorKeys = Object.keys(Colors)
 
-function getRandomColor() {
+const getRandomColor = () => {
   // Generate a random key to get a random color
   const randomIndex = Math.floor(Math.random() * colorKeys.length)
   const colorKey = colorKeys[randomIndex]
   return Colors[colorKey]
 }
 
-export const newPattern = 
-  dispatcher(actions.PATTERN_ADDED, actions.GAME_RESTARTED)
-    .scan((pattern, data) => {
-      // If not data restarted
-      if (!data) {
-        return {colors: []}
-      }
+const getPattern = (prevPattern, data) => {
+  // If no data restarted
+  if (!data) {
+    return {colors: []}
+  }
 
-      const patternObj = {
-        id: pattern.colors.length + 1,
-        colors: pattern.colors.slice()
-      }
+  const patternObj = {
+    id: prevPattern.colors.length + 1,
+    colors: prevPattern.colors.slice()
+  }
 
-      if (!patternObj.colors.length) {
-        // Start from the default level (-1 bcs will add another color after for)
-        for (let i = 0; i < DefaultLevel - 1; i++) {
-          patternObj.colors.push(getRandomColor())
-          patternObj.colors.push('transparent')   
-        }      
-      }
-      
+  if (!patternObj.colors.length) {
+    // Start from the default level (-1 bcs will add another color after for)
+    for (let i = 0; i < DefaultLevel - 1; i++) {
       patternObj.colors.push(getRandomColor())
-      patternObj.colors.push('transparent')  
+      patternObj.colors.push('transparent')   
+    }      
+  }
+  
+  patternObj.colors.push(getRandomColor())
+  patternObj.colors.push('transparent')  
 
-      return patternObj
-    }, {colors: []})   
-    .startWith({colors: []})
-    .publishReplay(1)
-    .refCount()
+  return patternObj
+}
+
+const aggregatePatterns = (patterns, pattern) => {
+  // Game restarted
+  if (!pattern.colors.length) {
+    return [] 
+  }
+
+  patterns.push(pattern)
+
+  return patterns
+}
+
+export const newPattern = 
+  getPayload(Actions.PATTERN_ADDED, Actions.GAME_RESTARTED)
+  .scan(getPattern, {colors: []})   
+  .startWith({colors: []})
+  .publishReplay(1)
+  .refCount()
 
 export const patterns = 
   newPattern
-  .scan((patterns, pattern) => {
-    // Game restarted
-    if (!pattern.colors.length) {
-      return [] 
-    }
-
-    patterns.push(pattern)
-
-    return patterns
-  }, [])
+  .scan(aggregatePatterns, [])
   .startWith([])
   .publishReplay(1)
   .refCount()

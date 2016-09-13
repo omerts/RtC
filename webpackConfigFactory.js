@@ -260,7 +260,9 @@ function webpackConfigFactory({ target, mode }, { json }) {
             {
               env: {
                 development: {
-                  plugins: ['react-hot-loader/babel'],
+                  plugins: ['react-hot-loader/babel', 
+                            'transform-object-rest-spread',
+                            'transform-es2015-destructuring'],
                 },
               },
             },

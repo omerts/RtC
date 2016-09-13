@@ -1,4 +1,5 @@
 import { renderToString } from 'react-dom/server';
+
 import createTemplate from './createTemplate';
 // TODO: Import the webpack config and resolve the bundle assets location from it.
 import ClientBundleAssets from '../../../build/client/assets.json';
@@ -38,7 +39,7 @@ const template = createTemplate(assets);
  *
  * @return The full HTML page in the form of a React element.
  */
-function render({ rootElement, initialState, title, meta = {} } = {}) {  
+function render({ rootElement, initialState, title, meta = {} } = {}) {
   return template({
     title: title || process.env.WEBSITE_TITLE,
     meta: Object.assign(
