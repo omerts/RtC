@@ -48,8 +48,6 @@ const getServices = () => {
 const FlowDiagram = (props) => {
   const {lastActions} = props
 
-  console.log(lastActions)
-
   return <div className='flow-wrapper'>
     {getDispatcher(lastActions)}
     <div className='arrow'>&#11015;Actions</div>
