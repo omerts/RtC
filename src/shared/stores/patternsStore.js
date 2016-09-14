@@ -5,13 +5,13 @@ import {Colors, GameSpeedMS} from 'shared/consts'
 import createMapToObjFunc from 'shared/utils/createMapToObjFunc'
 
 const getColors = ({colors}) => {
-  // Add null to end to recognize end of pattern, 
+  // Add null to end to recognize end of pattern,
   // replace the transparent last cell
   const clone = colors.slice()
   clone[clone.length - 1] = null
 
   return Observable
-            .from(clone)  
+            .from(clone)
 }
 
 const delayValue = (color) => {
@@ -33,7 +33,7 @@ const aggregatePattern = (colors, data) => {
 
 const createColorTappedHandler = ({pattern, user}) => {
   let tapIndex = 0
-      
+
   return (color) => {
     dispatch(Actions.COLOR_TAPPED, {userId: user.id, color})
 
@@ -42,7 +42,7 @@ const createColorTappedHandler = ({pattern, user}) => {
     // Check if pattern is right
     if (tapIndex < colors.length &&
         colors[tapIndex] === Colors[color]) {
-      // Add 1 to tapIndex bcs of transparent color, 
+      // Add 1 to tapIndex bcs of transparent color,
       // decrease 1 from length bcs index starts from 0
       if ((tapIndex + 1) === (colors.length - 1)) {
         // Todo better secuirty with enteredPattern
@@ -57,28 +57,28 @@ const createColorTappedHandler = ({pattern, user}) => {
   }
 }
 
-const gameRestarted = 
+const gameRestarted =
   getPayload(Actions.GAME_STARTED)
   .mapTo(() => {})
 
-export const newPattern = 
+export const newPattern =
   getPayload(Actions.PATTERN_ACTIVATED)
 
-export const currentColor = 
+export const currentColor =
   newPattern
   .switchMap(getColors)
-  .map(delayValue)     
-  .concatAll()        
+  .map(delayValue)
+  .concatAll()
   .startWith(null)
 
 export const currentPattern =
-  getPayload(Actions.COLOR_TAPPED, 
-             Actions.GAME_STARTED, 
+  getPayload(Actions.COLOR_TAPPED,
+             Actions.GAME_STARTED,
              Actions.PATTERN_ACTIVATED)
   .scan(aggregatePattern, [])
   .startWith([])
 
-export const onColorTapped = 
+export const onColorTapped =
   newPattern
   .withLatestFrom(getPayload(Actions.USER_REGISTERED),
                   createMapToObjFunc('pattern', 'user'))

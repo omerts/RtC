@@ -1,0 +1,63 @@
+$arrow-size: 3rem;
+
+.flow-wrapper {
+  // credit to http://jsfiddle.net/Nath/34eMN/
+  .arrow {
+    width: $arrow-size;
+    height: $arrow-size;
+    font-size: $arrow-size;
+    line-height: $arrow-size;
+    margin: 2rem auto;
+    text-align: center;
+    -webkit-animation: bounce 2s infinite ease-in-out;
+  }
+
+  @-webkit-keyframes bounce {
+    0%, 20%, 60%, 100%  { -webkit-transform: translateY(0); }
+    40%  { -webkit-transform: translateY(-20px); }
+    80% { -webkit-transform: translateY(-10px); }
+  }
+
+  .panel {
+    margin: 0 auto;
+    color: black;
+    text-align: center;
+  }
+
+  .dispatcher {
+    width: 50rem;
+    h4 {
+      color: #5946B2;
+    }
+
+    p {
+      overflow: hidden;
+    }
+  }
+
+  .stores, .services {
+    width: 13.2rem;
+  }
+
+  .react {
+    img {
+      width: 10rem;
+    }
+    text-align: center;
+
+    .left {
+      float: left;
+    }
+
+    .right {
+      padding-left: 2rem;
+      text-align: left;
+      height: 20rem;
+      overflow-y: scroll;
+    }
+  }
+
+  .glyphicon {
+    font-size: 10rem;
+  }
+}
