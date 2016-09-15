@@ -14,7 +14,7 @@ export const Colors = {
 
 export const GameSpeedMS = 1000
 
-export const DefaultLevel = 3
+export const DefaultLevel = 5
 
 export const GameIsInProgressErrorCode = -999
 

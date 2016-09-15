@@ -23,7 +23,7 @@ const getActions = (actions) => {
 
 const getBox = (name) => {
   return (
-    <div className={`box box-${name}`}>
+    <div className={`box box-${name.split(' ')[0]}`}>
       <h4>{name}</h4>      
     </div>)
 }

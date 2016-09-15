@@ -27,8 +27,15 @@ $arrow-size: 3rem;
 
 
       h4 {
-        font-size: 2rem;
+        font-size: 1.8rem;
         margin-top: 4rem;
+        padding: 0 2rem;
+      }
+
+      &.box-Services {
+        h4 {
+          margin-top: 3.4rem;
+        }
       }
 
       &.box-Dispatcher {
