@@ -6,3 +6,5 @@ import loggerService from './loggerService'
 export default Observable.merge(socketService,
                                 browerHistoryService,
                                 loggerService)
+                .publishReplay(1)
+                .refCount()

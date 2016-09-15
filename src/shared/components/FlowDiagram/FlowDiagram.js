@@ -3,6 +3,14 @@ import {Panel, ListGroup, ListGroupItem, Glyphicon, Badge} from 'react-bootstrap
 
 import './FlowDiagram.scss'
 
+const getStyle = (isActive) => {
+  if (isActive) {
+    return {color: 'purple'}
+  }
+
+  return {}
+}
+
 const getActions = (actions) => {
   return actions
          .map((action, i) => {
@@ -13,50 +21,61 @@ const getActions = (actions) => {
          })
 }
 
-const getDispatcher = (actions) => {
-  return <Panel header='Dispatcher' className='dispatcher' bsStyle='success'>
-      <ListGroup>
-        {getActions(actions)}
-      </ListGroup>
+const getBox = (name) => {
+  return (
+    <div className={`box box-${name}`}>
+      <h4>{name}</h4>      
+    </div>)
+}
+
+const getArrow = (arrow, isActive) => {
+  return <div className='arrow' style={getStyle(isActive)}>
+    {arrow}
+  </div>
+}
+
+const getActionsPanel = (actions) => {
+  return <Panel className='actions' header='Actions' bsStyle='info'>
+     <ListGroup>
+      {getActions(actions)}
+     </ListGroup>
   </Panel>
 }
 
-const getStores = () => {
-  return <Panel className='stores' header='Stores' bsStyle='info'>
-      <Glyphicon glyph='tasks' />
-  </Panel>
-}
-
-const getRenders = (props) => {
-  return <Panel className='react' header='React' bsStyle='danger'>
-      <div className='left'>
-        <p>State updates: <Badge>{props.stateCount}</Badge></p>
-        <img src='https://upload.wikimedia.org/wikipedia/commons/5/57/React.js_logo.svg' alt='react' />
-      </div>
-      <div className='right'>
-        <pre>{JSON.stringify(props, null, 4)}</pre>
-      </div>
-  </Panel>
-}
-
-const getServices = () => {
-  return <Panel className='services' header='Services' bsStyle='warning'>
-    <Glyphicon glyph='cog' />
+const getState = (appState) => {
+  return <Panel header='State' bsStyle='danger'>
+    <div>
+      <pre>{JSON.stringify(appState, null, 4)}</pre>
+    </div>
   </Panel>
 }
 
 const FlowDiagram = (props) => {
-  const {lastActions} = props
+  const {serviceEmitted,
+         actionEmitted,
+         stateEmitted,
+         appState,
+         lastActions} = props
 
   return <div className='flow-wrapper'>
-    {getDispatcher(lastActions)}
-    <div className='arrow'>&#11015;Actions</div>
-    {getStores()}
-    <div className='arrow'>&#11015;State</div>
-    {getRenders(props)}
-    <div className='arrow'>&#11015;Actions</div>
-    {getServices()}
-    <div className='arrow'>&#8635;Actions</div>
+    <div className='boxes'>
+      {getBox('Services & Users')}
+      {getArrow('→', serviceEmitted)}
+      {getBox('Dispatcher')}
+      {getArrow('→', actionEmitted)}
+      {getBox('Stores')}
+      {getArrow('→', stateEmitted)}      
+      {getBox('View')}
+      {getArrow('↻', false)}
+    </div>
+    <div className='data'>
+      <div className='left'>
+        {getActionsPanel(lastActions)}
+      </div>
+      <div className='right'>
+        {getState(appState)}      
+      </div>
+    </div>
   </div>
 }
 

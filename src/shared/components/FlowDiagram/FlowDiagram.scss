@@ -1,63 +1,66 @@
 $arrow-size: 3rem;
 
 .flow-wrapper {
-  // credit to http://jsfiddle.net/Nath/34eMN/
-  .arrow {
-    width: $arrow-size;
-    height: $arrow-size;
-    font-size: $arrow-size;
-    line-height: $arrow-size;
-    margin: 2rem auto;
-    text-align: center;
-    -webkit-animation: bounce 2s infinite ease-in-out;
-  }
-
-  @-webkit-keyframes bounce {
-    0%, 20%, 60%, 100%  { -webkit-transform: translateY(0); }
-    40%  { -webkit-transform: translateY(-20px); }
-    80% { -webkit-transform: translateY(-10px); }
-  }
-
+  width: 80%;
+  margin: 2rem auto;
   .panel {
     margin: 0 auto;
-    color: black;
-    text-align: center;
+    color: black;    
   }
 
-  .dispatcher {
-    width: 50rem;
-    h4 {
-      color: #5946B2;
+  .boxes {
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .arrow {
+      font-size: 9rem;
     }
 
-    p {
-      overflow: hidden;
+    .box {
+      width: 20rem;
+      height: 10rem;
+      text-align: center;
+      margin: 10px;
+      background-color: #E06666;
+
+
+      h4 {
+        font-size: 2rem;
+        margin-top: 4rem;
+      }
+
+      &.box-Dispatcher {
+        background-color: rgb(147, 196, 125);
+      }
+
+      &.box-Stores {
+        background-color: #F6B26B;
+      }
+
+      &.box-View {
+        background-color: #6D9EEB;
+      }
     }
   }
 
-  .stores, .services {
-    width: 13.2rem;
-  }
+  .data {
+    margin-top: 3rem;
+    text-align: left;
 
-  .react {
-    img {
-      width: 10rem;
+    .right, .left {
+      overflow-y: auto;
+      height: 40rem;      
     }
-    text-align: center;
 
     .left {
       float: left;
+      width: 50%;
     }
 
     .right {
-      padding-left: 2rem;
-      text-align: left;
-      height: 20rem;
-      overflow-y: scroll;
+      padding-left: 2rem;      
     }
-  }
-
-  .glyphicon {
-    font-size: 10rem;
   }
 }

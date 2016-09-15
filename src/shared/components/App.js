@@ -43,7 +43,6 @@ const App = (props) => {
   return <div className='app-container'>
             {props.route.path === '/' && getClientView(props)}
             {props.route.path === '/mmm' && getAdminView(props)}
-            {props.route.path === '/flow' && getFlowView(props)}
          </div>
 }
 
